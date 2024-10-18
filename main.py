@@ -1,12 +1,13 @@
 import asyncio
 import os
-from aiogram import Bot, Dispatcher, types
+from aiogram import Bot, Dispatcher
 from dotenv import load_dotenv
 from handlers import router
 
+
 load_dotenv()
 TOKEN = os.getenv('TOKEN')
-WEBHOOK_URL = os.getenv('WEBHOOK_URL')
+
 bot = Bot(token=TOKEN)
 dp = Dispatcher()
 dp.include_router(router)
@@ -17,4 +18,7 @@ async def main():
 
 
 if __name__ == "__main__":
-    asyncio.run(main())
+    try:
+        asyncio.run(main())
+    except KeyboardInterrupt:
+        print("Программа была прервана")
