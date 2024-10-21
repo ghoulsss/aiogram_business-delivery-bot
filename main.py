@@ -22,3 +22,6 @@ if __name__ == "__main__":
         asyncio.run(main())
     except KeyboardInterrupt:
         print("Программа была прервана")
+    except Exception as e:
+        print('что-то пошло не так я не работаю, причина:', e)
+        
