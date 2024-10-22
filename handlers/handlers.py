@@ -18,7 +18,7 @@ async def start(message: Message):
         elif message.from_user.id == admin_sklada:
             pass
             # await message.answer("Меню", reply_markup=inline_keyboard_menu_admin_sklada)
-        elif message.from_user.id == courier: 
+        elif message.from_user.id == courier:
             await message.answer("Меню", reply_markup=inline_keyboard_menu_courier)
 
 
