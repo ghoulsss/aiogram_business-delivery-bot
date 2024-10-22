@@ -1,9 +1,4 @@
-from aiogram.types import (
-    KeyboardButton,
-    ReplyKeyboardMarkup,
-    InlineKeyboardButton,
-    InlineKeyboardMarkup
-)
+from aiogram.types import InlineKeyboardButton, InlineKeyboardMarkup
 
 
 inline_keyboard_menu_admin = InlineKeyboardMarkup(
@@ -22,16 +17,16 @@ inline_keyboard_menu_admin = InlineKeyboardMarkup(
 inline_keyboard_menu_courier = InlineKeyboardMarkup(
     inline_keyboard=[
         [
-            InlineKeyboardButton(text="Оставить заявку", callback_data="Оставить заявку"),
+            InlineKeyboardButton(
+                text="Оставить заявку", callback_data="Оставить заявку"
+            ),
             InlineKeyboardButton(text="Адреса", callback_data="Адреса"),
         ],
         [
             InlineKeyboardButton(text="Задание", callback_data="Задание"),
             InlineKeyboardButton(text="Отчет", callback_data="Отчет"),
         ],
-        [
-            InlineKeyboardButton(text="День окончен", callback_data="День окончен")
-        ]
+        [InlineKeyboardButton(text="День окончен", callback_data="День окончен")],
     ]
 )
 
