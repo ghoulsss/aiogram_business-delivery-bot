@@ -2,19 +2,19 @@ from aiogram.types import (
     KeyboardButton,
     ReplyKeyboardMarkup,
     InlineKeyboardButton,
-    InlineKeyboardMarkup,
+    InlineKeyboardMarkup
 )
 
 
-menu_button_1 = KeyboardButton(text="Адреса")
-menu_button_2 = KeyboardButton(text="Регламент")
-menu_button_3 = KeyboardButton(text="Задание")
-menu_button_4 = KeyboardButton(text="Заявка")
+# menu_button_1 = KeyboardButton(text="Адреса")
+# menu_button_2 = KeyboardButton(text="Регламент")
+# menu_button_3 = KeyboardButton(text="Задание")
+# menu_button_4 = KeyboardButton(text="Заявка")
 
-keyboard = ReplyKeyboardMarkup(
-    keyboard=[[menu_button_1, menu_button_2, menu_button_3, menu_button_4]],
-    resize_keyboard=True,
-)
+# keyboard = ReplyKeyboardMarkup(
+#     keyboard=[[menu_button_1, menu_button_2, menu_button_3, menu_button_4]],
+#     resize_keyboard=True,
+# )
 
 # -------------------------------------------------------
 # inline кнопки
@@ -30,7 +30,6 @@ inline_keyboard_menu = InlineKeyboardMarkup(
         ],
     ]
 )
-
 
 
 # reglament_button_1 = KeyboardButton(text="Подтвердить")

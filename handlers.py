@@ -10,14 +10,14 @@ allowed_users = [super_user, admin_sklada, courier]
 router = Router()
 
 
-@router.message(Command(commands=["start"]))
+@router.message(Command(commands=["start", "menu"]))
 async def start(message: Message):
     if proverka_prav:
         await message.answer("Меню", reply_markup=inline_keyboard_menu)
 
 
-@router.message(F.text == "Адреса")
-async def adress_answer(message: Message):
+@router.callback_query(F.data == "Адреса")
+async def adress_callback(callback: CallbackQuery):
     adress = (
         service.spreadsheets()
         .values()
@@ -29,23 +29,24 @@ async def adress_answer(message: Message):
     for i in adress[1:]:
         buffer += f"id адреса: {i[0]}\nАдрес: {i[1]}\nВладелец: {i[2]}\nТелефон: {i[3]}\nПочта: {i[4]}\nПримечание: {i[5]}\n\n"
 
-    await message.answer(text=f"{buffer}") # , reply_markup=inline_keyboard_menu
+    await callback.message.answer(text=f"{buffer}")
+    await callback.answer('')
 
 
-@router.message(F.text == "Регламент")
-async def reglament_answer(message: Message):
-    await message.answer(text="Регламент")
+@router.callback_query(F.data == "Регламент")
+async def reglament_callback(callback: CallbackQuery):
+    await callback.message.answer(text="Регламент")
+    await callback.answer('')
 
 
-@router.message(F.text == "Задание")
-async def zadanie_answer(message: Message):
-    await message.answer(
-        text="Задание",
-    )
+@router.callback_query(F.data == "Задание")
+async def zadanie_callback(callback: CallbackQuery):
+    await callback.message.answer(text="Задание")
+    await callback.answer('')
 
 
-@router.message(F.text == "Заявка")
-async def zayavka_answer(message: Message):
+@router.callback_query(F.data == "Заявка")
+async def zayavka_callback(callback: CallbackQuery):
     adress = (
         service.spreadsheets()
         .values()
@@ -53,6 +54,7 @@ async def zayavka_answer(message: Message):
         .execute()
         .get("values", [])
     )
+
     buffer = ""
     for i in adress[1:]:
         buffer += (
@@ -60,7 +62,8 @@ async def zayavka_answer(message: Message):
             f"Наименование: {i[5]}\nТелефон: {i[6]}\nЦена: {i[7]}\n\n"
         )
 
-    await message.answer(text=f"{buffer}") # , reply_markup=inline_keyboard_menu
+    await callback.message.answer(text=f"{buffer}")
+    await callback.answer('')
 
 
 async def proverka_prav(message: Message):
