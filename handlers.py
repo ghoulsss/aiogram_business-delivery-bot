@@ -30,19 +30,23 @@ async def adress_callback(callback: CallbackQuery):
         buffer += f"id адреса: {i[0]}\nАдрес: {i[1]}\nВладелец: {i[2]}\nТелефон: {i[3]}\nПочта: {i[4]}\nПримечание: {i[5]}\n\n"
 
     await callback.message.answer(text=f"{buffer}")
-    await callback.answer('')
+    await callback.answer("")
 
 
 @router.callback_query(F.data == "Регламент")
 async def reglament_callback(callback: CallbackQuery):
-    await callback.message.answer(text="Регламент")
-    await callback.answer('')
+    await callback.message.edit_text(
+        text="Введите товар и кол-во", reply_markup=inline_keyboard_reglament
+    )
+    await callback.answer("")
 
 
 @router.callback_query(F.data == "Задание")
 async def zadanie_callback(callback: CallbackQuery):
-    await callback.message.answer(text="Задание")
-    await callback.answer('')
+    await callback.message.answer(
+        text="Введите адрес, товар и кол-во", reply_markup=inline_keyboard_zadanie
+    )
+    await callback.answer("")
 
 
 @router.callback_query(F.data == "Заявка")
@@ -63,7 +67,7 @@ async def zayavka_callback(callback: CallbackQuery):
         )
 
     await callback.message.answer(text=f"{buffer}")
-    await callback.answer('')
+    await callback.answer("")
 
 
 async def proverka_prav(message: Message):
