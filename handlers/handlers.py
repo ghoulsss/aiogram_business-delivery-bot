@@ -13,7 +13,13 @@ router = Router()
 @router.message(Command(commands=["start", "menu"]))
 async def start(message: Message):
     if proverka_prav:
-        await message.answer("Меню", reply_markup=inline_keyboard_menu)
+        if message.from_user.id == super_user:
+            await message.answer("Меню", reply_markup=inline_keyboard_menu_admin)
+        elif message.from_user.id == admin_sklada:
+            pass
+            # await message.answer("Меню", reply_markup=inline_keyboard_menu_admin_sklada)
+        elif message.from_user.id == courier: 
+            await message.answer("Меню", reply_markup=inline_keyboard_menu_courier)
 
 
 @router.callback_query(F.data == "Адреса")
@@ -43,7 +49,7 @@ async def reglament_callback(callback: CallbackQuery):
 
 @router.callback_query(F.data == "Задание")
 async def zadanie_callback(callback: CallbackQuery):
-    await callback.message.answer(
+    await callback.message.edit_text(
         text="Введите адрес, товар и кол-во", reply_markup=inline_keyboard_zadanie
     )
     await callback.answer("")

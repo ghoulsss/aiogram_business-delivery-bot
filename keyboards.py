@@ -6,7 +6,7 @@ from aiogram.types import (
 )
 
 
-inline_keyboard_menu = InlineKeyboardMarkup(
+inline_keyboard_menu_admin = InlineKeyboardMarkup(
     inline_keyboard=[
         [
             InlineKeyboardButton(text="Адреса", callback_data="Адреса"),
@@ -16,6 +16,22 @@ inline_keyboard_menu = InlineKeyboardMarkup(
             InlineKeyboardButton(text="Задание", callback_data="Задание"),
             InlineKeyboardButton(text="Заявка", callback_data="Заявка"),
         ],
+    ]
+)
+
+inline_keyboard_menu_courier = InlineKeyboardMarkup(
+    inline_keyboard=[
+        [
+            InlineKeyboardButton(text="Оставить заявку", callback_data="Оставить заявку"),
+            InlineKeyboardButton(text="Адреса", callback_data="Адреса"),
+        ],
+        [
+            InlineKeyboardButton(text="Задание", callback_data="Задание"),
+            InlineKeyboardButton(text="Отчет", callback_data="Отчет"),
+        ],
+        [
+            InlineKeyboardButton(text="День окончен", callback_data="День окончен")
+        ]
     ]
 )
 
