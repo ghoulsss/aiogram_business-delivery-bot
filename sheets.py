@@ -12,15 +12,15 @@ credentials = service_account.Credentials.from_service_account_file(
 )
 service = build("sheets", "v4", credentials=credentials)
 
-
-data_sheet = (
+# таблица пользователей
+users = (
     service.spreadsheets()
     .values()
-    .get(spreadsheetId=spreadsheet_id, range="Лист1")
+    .get(spreadsheetId=spreadsheet_id, range="пользователи")
     .execute()
     .get("values", [])
 )
 
-super_user = int(data_sheet[0][1])
-admin_sklada = int(data_sheet[1][1])
-courier = int(data_sheet[2][1])
+super_user = int(users[0][1])
+admin_sklada = int(users[1][1])
+courier = int(users[2][1])
