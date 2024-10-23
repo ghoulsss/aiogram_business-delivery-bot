@@ -16,7 +16,7 @@ service = build("sheets", "v4", credentials=credentials)
 data_sheet = (
     service.spreadsheets()
     .values()
-    .get(spreadsheetId=spreadsheet_id, range="пользователи")
+    .get(spreadsheetId=spreadsheet_id, range="Лист1")
     .execute()
     .get("values", [])
 )
