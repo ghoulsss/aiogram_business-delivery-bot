@@ -3,7 +3,7 @@ from aiogram import types
 from aiogram.filters import Command
 from sheets import super_user, admin_sklada, courier
 
-allowed_users=[super_user, admin_sklada, courier]
+allowed_users = [super_user, admin_sklada, courier]
 
 router = Router()
 
