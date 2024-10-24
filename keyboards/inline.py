@@ -23,7 +23,9 @@ inline_keyboard_menu_courier = InlineKeyboardMarkup(
             InlineKeyboardButton(text="Адреса", callback_data="Адреса"),
         ],
         [
-            InlineKeyboardButton(text="Задание", callback_data="Задание"),
+            InlineKeyboardButton(
+                text="Дневное Задание", callback_data="Дневное_задание"
+            ),
             InlineKeyboardButton(text="Отчет", callback_data="Отчет"),
         ],
         [InlineKeyboardButton(text="День окончен", callback_data="День окончен")],
@@ -40,7 +42,7 @@ inline_keyboard_reglament = InlineKeyboardMarkup(
             InlineKeyboardButton(text="Добавить", callback_data="Добавить_регламент"),
         ],
         [
-            InlineKeyboardButton(text="Отмена", callback_data="Отмена_регламент"),
+            InlineKeyboardButton(text="Заново", callback_data="Заново_регламент"),
             InlineKeyboardButton(text="Меню", callback_data="Меню"),
         ],
     ]
@@ -56,6 +58,34 @@ inline_keyboard_zadanie = InlineKeyboardMarkup(
         ],
         [
             InlineKeyboardButton(text="Заново", callback_data="Заново_задание"),
+            InlineKeyboardButton(text="Меню", callback_data="Меню"),
+        ],
+    ]
+)
+
+inline_keyboard_otchet = InlineKeyboardMarkup(
+    inline_keyboard=[
+        [
+            InlineKeyboardButton(text="Подтвердить", callback_data="Подтвердить_отчет"),
+            InlineKeyboardButton(text="Добавить", callback_data="Добавить_отчет"),
+        ],
+        [
+            InlineKeyboardButton(text="Заново", callback_data="Заново_отчет"),
+            InlineKeyboardButton(text="Меню", callback_data="Меню"),
+        ],
+    ]
+)
+
+inline_keyboard_zayavka = InlineKeyboardMarkup(
+    inline_keyboard=[
+        [
+            InlineKeyboardButton(
+                text="Подтвердить", callback_data="Подтвердить_заявка"
+            ),
+            InlineKeyboardButton(text="Добавить", callback_data="Добавить_заявка"),
+        ],
+        [
+            InlineKeyboardButton(text="Заново", callback_data="Заново_заявка"),
             InlineKeyboardButton(text="Меню", callback_data="Меню"),
         ],
     ]
