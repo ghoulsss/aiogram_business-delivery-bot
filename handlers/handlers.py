@@ -13,9 +13,9 @@ router = Router()
 @router.message(Command(commands=["start", "menu"]))
 async def start(message: Message):
     if proverka_prav:
-        if message.from_user.id == super_user:
-            await message.answer("Меню", reply_markup=inline_keyboard_menu_admin)
-        elif message.from_user.id == admin_sklada:
+        if message.from_user.id == admin_sklada:
+            await message.answer("Меню", reply_markup=inline_keyboard_menu_admin_sklada)
+        elif message.from_user.id == super_user:
             pass
             # await message.answer("Меню", reply_markup=inline_keyboard_menu_admin_sklada)
         elif message.from_user.id == courier:

@@ -64,12 +64,12 @@ async def zayavka_callback(callback: CallbackQuery):
 @router1.callback_query(F.data == "Меню")
 async def adress_callback(callback: CallbackQuery):
     if proverka_prav:
-        if callback.from_user.id == super_user:
+        if callback.from_user.id == admin_sklada:
             await callback.message.edit_text(
-                text="Меню", reply_markup=inline_keyboard_menu_admin
+                text="Меню", reply_markup=inline_keyboard_menu_admin_sklada
             )
             await callback.answer("")
-        elif callback.from_user.id == admin_sklada:
+        elif callback.from_user.id == super_user:
             pass
             # await message.message.edit_text(text="Меню", reply_markup=inline_keyboard_menu_admin_sklada)
             await callback.answer("")
@@ -78,3 +78,23 @@ async def adress_callback(callback: CallbackQuery):
                 text="Меню", reply_markup=inline_keyboard_menu_courier
             )
             await callback.answer("")
+
+
+@router1.callback_query(F.data == "Подтвердить_задание")
+async def reglament_callback(callback: CallbackQuery):
+    # отправка содержимого текстового в таблицу
+
+    # удаление текстового
+
+    await callback.message.edit_text(text="Отправлено")
+    await callback.answer("")
+
+
+@router1.callback_query(F.data == "Подтвердить_регламент")
+async def reglament_callback(callback: CallbackQuery):
+    # отправка содержимого текстового в таблицу
+
+    # удаление текстового
+
+    await callback.message.edit_text(text="Отправлено")
+    await callback.answer("")
