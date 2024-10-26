@@ -1,10 +1,17 @@
 from aiogram import Router, F
-from aiogram.types import CallbackQuery
+from aiogram.types import CallbackQuery, Message
 from sheets import *
 from keyboards.inline import *
 from handlers.handlers import proverka_prav
+from aiogram.fsm.state import StatesGroup, State
+from aiogram.fsm.context import FSMContext
+
 
 router1 = Router()
+
+
+class Text(StatesGroup):
+    text = State()
 
 
 @router1.callback_query(F.data == "Адреса")
@@ -132,28 +139,54 @@ async def reglament_callback(callback: CallbackQuery):
 @router1.callback_query(F.data == "Задание")  # админ_склада
 async def zadanie_callback(callback: CallbackQuery):
     await callback.message.edit_text(
-        text="Введите адрес, товар и кол-во", reply_markup=inline_keyboard_zadanie
+        text="Выберите одно действие", reply_markup=inline_keyboard_zadanie
     )
     await callback.answer("")
 
 
 @router1.callback_query(F.data == "Подтвердить_задание")  # админ_склада
 async def reglament_callback(callback: CallbackQuery):
-    # отправка содержимого текстового в таблицу "Задание"
-    # удаление текстового
-    await callback.message.edit_text(text="Отправлено_задание")
+    with open("add_zadanie.txt", "r", encoding="utf-8") as file:
+        buf = []
+        for line in file:
+            row = line.strip().split()
+            buf.append(row)
+
+    worksheet = sh.worksheet("Задание")
+
+    worksheet.append_rows(buf)
+
+    with open("add_zadanie.txt", "w") as file:
+        pass
+
+    await callback.message.edit_text(text=f"Задание отправлено в таблицу")
     await callback.answer("")
 
 
 @router1.callback_query(F.data == "Добавить_задание")  # админ_склада
-async def reglament_callback(callback: CallbackQuery):
-    await callback.message.edit_text(text="Добавить_задание")
+async def reglament_callback(callback: CallbackQuery, state: FSMContext):
+    await state.set_state(Text.text)
+    await callback.message.edit_text(text="Введите")
     await callback.answer("")
+
+
+@router1.message(Text.text)
+async def reglament_process_callback(message: Message, state: FSMContext):
+    data = message.text
+    with open("add_zadanie.txt", "a") as file:
+        file.writelines(f"{data}\n")
+
+    await message.answer(
+        f"Добавлено, нажмите подтвердить чтобы отправить в таблицу",
+        reply_markup=inline_keyboard_zadanie,
+    )
 
 
 @router1.callback_query(F.data == "Заново_задание")  # админ_склада
 async def reglament_callback(callback: CallbackQuery):
-    await callback.message.edit_text(text="Заново_задание")
+    with open("add_zadanie.txt", "w") as file:
+        pass
+    await callback.message.edit_text(text="Задание очищено")
     await callback.answer("")
 
 

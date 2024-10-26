@@ -2,6 +2,8 @@ import os
 from google.oauth2 import service_account
 from googleapiclient.discovery import build
 from dotenv import load_dotenv
+import gspread
+from oauth2client.service_account import ServiceAccountCredentials
 
 
 load_dotenv()
@@ -23,3 +25,7 @@ users = (
 super_user = int(users[0][1])
 admin_sklada = int(users[1][1])
 courier = int(users[2][1])
+
+gc = gspread.service_account(filename="key.json")
+
+sh = gc.open("доставка")
