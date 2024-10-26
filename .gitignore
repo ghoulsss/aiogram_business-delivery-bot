@@ -6,3 +6,4 @@ __pycache__/
 key.json
 .vscode
 test.py
+add*.txt

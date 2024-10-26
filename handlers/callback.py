@@ -18,7 +18,15 @@ class Reglament(StatesGroup):
     text = State()
 
 
-@router1.callback_query(F.data == "Адреса")
+class Otchet(StatesGroup):
+    text = State()
+
+
+class Zayavka(StatesGroup):
+    text = State()
+
+
+@router1.callback_query(F.data == "Адреса")  # общая
 async def adress_callback(callback: CallbackQuery):
     get_credentials()
     adress = (
@@ -36,7 +44,7 @@ async def adress_callback(callback: CallbackQuery):
     await callback.answer("")
 
 
-@router1.callback_query(F.data == "Заявка")  # админ_склада
+@router1.callback_query(F.data == "Заявка")  # админ_склада вывод
 async def zayavka_callback(callback: CallbackQuery):
     get_credentials()
     adress = (
@@ -58,7 +66,7 @@ async def zayavka_callback(callback: CallbackQuery):
     await callback.answer("")
 
 
-@router1.callback_query(F.data == "Меню")
+@router1.callback_query(F.data == "Меню")  #  общая
 async def adress_callback(callback: CallbackQuery):
     if proverka_prav:
         if callback.from_user.id == admin_sklada:
@@ -78,7 +86,7 @@ async def adress_callback(callback: CallbackQuery):
             await callback.answer("")
 
 
-@router1.callback_query(F.data == "Дневное_задание")  # курьер
+@router1.callback_query(F.data == "Дневное_задание")  # курьер вывод
 async def reglament_callback(callback: CallbackQuery):
     get_credentials()
     adress = (
@@ -93,18 +101,10 @@ async def reglament_callback(callback: CallbackQuery):
     for i in adress[1:]:
         buffer += (
             f"id адреса: {i[0]}\nid товара: {i[1]}\nАдрес: {i[2]}\nВладелец: {i[3]}\nКоличество: {i[4]}\n"
-            f"Наименование: {i[5]}\nТелефон: {i[6]}\n"
+            f"Наименование: {i[5]}\nТелефон: {i[6]}\n\n"
         )
 
     await callback.message.edit_text(text=f"{buffer}")
-    await callback.answer("")
-
-
-@router1.callback_query(F.data == "Отчет")  # курьер
-async def reglament_callback(callback: CallbackQuery):
-    await callback.message.edit_text(
-        text="Введите адрес", reply_markup=inline_keyboard_otchet
-    )
     await callback.answer("")
 
 
@@ -119,7 +119,7 @@ async def reglament_callback(callback: CallbackQuery):
 @router1.callback_query(F.data == "Регламент")  # админ_склада
 async def reglament_callback(callback: CallbackQuery):
     await callback.message.edit_text(
-        text="Введите товар и кол-во", reply_markup=inline_keyboard_reglament
+        text="Выберите одно действие", reply_markup=inline_keyboard_reglament
     )
     await callback.answer("")
 
@@ -139,14 +139,14 @@ async def reglament_callback(callback: CallbackQuery):
     with open("add_reglament.txt", "w") as file:
         pass
 
-    await callback.message.edit_text(text=f"Регламент отправлено в таблицу")
+    await callback.message.edit_text(text=f"Регламент отправлен в таблицу")
     await callback.answer("")
 
 
 @router1.callback_query(F.data == "Добавить_регламент")  # админ_склада
 async def reglament_callback(callback: CallbackQuery, state: FSMContext):
     await state.set_state(Reglament.text)
-    await callback.message.edit_text(text="Введите")
+    await callback.message.edit_text(text="Введите товар и кол-во...поменять что нужно")
     await callback.answer("")
 
 
@@ -200,7 +200,7 @@ async def reglament_callback(callback: CallbackQuery):
 @router1.callback_query(F.data == "Добавить_задание")  # админ_склада
 async def reglament_callback(callback: CallbackQuery, state: FSMContext):
     await state.set_state(Zadanie.text)
-    await callback.message.edit_text(text="Введите")
+    await callback.message.edit_text(text="Введите товар и кол-во...поменять что нужно")
     await callback.answer("")
 
 
@@ -226,30 +226,118 @@ async def reglament_callback(callback: CallbackQuery):
 
 @router1.callback_query(F.data == "Оставить_заявку")  # курьер
 async def reglament_callback(callback: CallbackQuery):
-    # данные в таблицу "Заявки"
-    # таблица задание наверно очищается после отправки
     await callback.message.edit_text(
-        text="Введите товар и кол-во", reply_markup=inline_keyboard_zayavka
+        text="Выберите одно действие", reply_markup=inline_keyboard_zayavka
     )
     await callback.answer("")
 
 
-@router1.callback_query(F.data == "Добавить_заявка")  # курьер
+@router1.callback_query(F.data == "Отчет")  # курьер
 async def reglament_callback(callback: CallbackQuery):
-    # в txt пишется добавление
-    await callback.message.edit_text(text="Отправлено")
+    await callback.message.edit_text(
+        text="Выберите одно действие", reply_markup=inline_keyboard_otchet
+    )
+    await callback.answer("")
+
+
+@router1.callback_query(F.data == "Подтвердить_отчет")  # курьер
+async def reglament_callback(callback: CallbackQuery):
+    with open("add_otchet.txt", "r", encoding="utf-8") as file:
+        buf = []
+        for line in file:
+            row = line.strip().split()
+            buf.append(row)
+
+    worksheet = sh.worksheet("Отчет")
+
+    worksheet.append_rows(buf)
+
+    with open("add_otchet.txt", "w") as file:
+        pass
+
+    await callback.message.edit_text(text=f"Отчет отправлен в таблицу")
+    await callback.answer("")
+
+
+@router1.callback_query(F.data == "Добавить_отчет")  # админ_склада
+async def reglament_callback(callback: CallbackQuery, state: FSMContext):
+    await state.set_state(Otchet.text)
+    await callback.message.edit_text(text="Введите товар и кол-во...поменять что нужно")
+    await callback.answer("")
+
+
+@router1.message(Otchet.text)
+async def reglament_process_callback(message: Message, state: FSMContext):
+    data = message.text
+    with open("add_otchet.txt", "a") as file:
+        file.writelines(f"{data}\n")
+
+    await message.answer(
+        f"Добавлено, нажмите подтвердить чтобы отправить в таблицу",
+        reply_markup=inline_keyboard_otchet,
+    )
+
+
+@router1.callback_query(F.data == "Заново_отчет")  # админ_склада
+async def reglament_callback(callback: CallbackQuery):
+    with open("add_otchet.txt", "w") as file:
+        pass
+    await callback.message.edit_text(text="Отчет очищен")
+    await callback.answer("")
+
+
+@router1.callback_query(F.data == "День_окончен")  # курьер
+async def reglament_callback(callback: CallbackQuery):
+    worksheet_sort = sh.worksheet("Сортировка")
+    worksheet_zada = sh.worksheet("Задание")
+    worksheet_sort.batch_clear(["A8:D10"])  # УКАЗАТЬ ВСЮ ТАБЛИЦУ ["A2:D"]
+    worksheet_zada.batch_clear(["A12:G13"])  # УКАЗАТЬ ВСЮ ТАБЛИЦУ ["A2:G"]
+    await callback.message.edit_text(text="Сортировка и Задание очищены")
     await callback.answer("")
 
 
 @router1.callback_query(F.data == "Подтвердить_заявка")  # курьер
 async def reglament_callback(callback: CallbackQuery):
-    # из txt данные отправляется в таблицу "Заявки"
-    await callback.message.edit_text(text="Отправлено_заявка")
+    with open("add_zayavka.txt", "r", encoding="utf-8") as file:
+        buf = []
+        for line in file:
+            row = line.strip().split()
+            buf.append(row)
+
+    worksheet = sh.worksheet("Заявки")
+
+    worksheet.append_rows(buf)
+
+    with open("add_zayavka.txt", "w") as file:
+        pass
+
+    await callback.message.edit_text(text=f"Заявка отправлена в таблицу")
     await callback.answer("")
 
 
-@router1.callback_query(F.data == "Заново_заявка")  # курьер
+@router1.callback_query(F.data == "Добавить_заявка")  # админ_склада
+async def reglament_callback(callback: CallbackQuery, state: FSMContext):
+    await state.set_state(Zayavka.text)
+    await callback.message.edit_text(text="Введите товар и кол-во...поменять что нужно")
+    await callback.answer("")
+
+
+@router1.message(Zayavka.text)
+async def reglament_process_callback(message: Message, state: FSMContext):
+    data = message.text
+    with open("add_zayavka.txt", "a") as file:
+        file.writelines(f"{data}\n")
+
+    await message.answer(
+        f"Добавлено, нажмите подтвердить чтобы отправить в таблицу",
+        reply_markup=inline_keyboard_zayavka,
+    )
+
+
+@router1.callback_query(F.data == "Заново_заявка")  # админ_склада
 async def reglament_callback(callback: CallbackQuery):
-    # очистка txt
+    with open("add_zayavka.txt", "w") as file:
+        pass
+
     await callback.message.edit_text(text="Заявка очищена!")
     await callback.answer("")
