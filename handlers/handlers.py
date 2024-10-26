@@ -18,8 +18,9 @@ async def start(message: Message):
                 "Меню", reply_markup=inline_keyboard_menu_admin_sklada
             )  # inline_keyboard_menu_admin_sklada
         elif message.from_user.id == super_user:
-            pass
-            # await message.answer("Меню", reply_markup=inline_keyboard_menu_admin)
+            await message.answer(
+                "Меню", reply_markup=inline_keyboard_menu_admin
+            )  # inline_keyboard_menu_admin
         elif message.from_user.id == courier:
             await message.answer(
                 "Меню", reply_markup=inline_keyboard_menu_courier
@@ -27,9 +28,4 @@ async def start(message: Message):
 
 
 async def proverka_prav(message: Message):
-    if message.from_user.id in allowed_users:
-        await message.answer(f"Привет я работаю!, у тебя есть доступ")
-        return True
-    else:
-        await message.answer(f"У тебя нет доступа")
-        return False
+    return True if message.from_user.id in allowed_users else False

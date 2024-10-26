@@ -16,6 +16,7 @@ class Text(StatesGroup):
 
 @router1.callback_query(F.data == "Адреса")
 async def adress_callback(callback: CallbackQuery):
+    get_credentials()
     adress = (
         service.spreadsheets()
         .values()
@@ -33,6 +34,7 @@ async def adress_callback(callback: CallbackQuery):
 
 @router1.callback_query(F.data == "Заявка")  # админ_склада
 async def zayavka_callback(callback: CallbackQuery):
+    get_credentials()
     adress = (
         service.spreadsheets()
         .values()
@@ -61,8 +63,9 @@ async def adress_callback(callback: CallbackQuery):
             )  # inline_keyboard_menu_admin_sklada
             await callback.answer("")
         elif callback.from_user.id == super_user:
-            pass
-            # await message.message.edit_text(text="Меню", reply_markup=inline_keyboard_menu_admin)
+            await callback.message.edit_text(
+                text="Меню", reply_markup=inline_keyboard_menu_admin
+            )  # inline_keyboard_menu_admin
             await callback.answer("")
         elif callback.from_user.id == courier:
             await callback.message.edit_text(
@@ -73,6 +76,7 @@ async def adress_callback(callback: CallbackQuery):
 
 @router1.callback_query(F.data == "Дневное_задание")  # курьер
 async def reglament_callback(callback: CallbackQuery):
+    get_credentials()
     adress = (
         service.spreadsheets()
         .values()

@@ -8,7 +8,7 @@ inline_keyboard_menu_admin_sklada = InlineKeyboardMarkup(
             InlineKeyboardButton(text="Регламент", callback_data="Регламент"),
         ],
         [
-            InlineKeyboardButton(text="Задание", callback_data="Задание"),
+            InlineKeyboardButton(text="Регламент", callback_data="Регламент"),
             InlineKeyboardButton(text="Заявка", callback_data="Заявка"),
         ],
     ]
@@ -29,6 +29,31 @@ inline_keyboard_menu_courier = InlineKeyboardMarkup(
             InlineKeyboardButton(text="Отчет", callback_data="Отчет"),
         ],
         [InlineKeyboardButton(text="День окончен", callback_data="День окончен")],
+    ]
+)
+
+inline_keyboard_menu_admin = InlineKeyboardMarkup(
+    inline_keyboard=[
+        [
+            InlineKeyboardButton(text="Адреса", callback_data="Адреса"),
+            InlineKeyboardButton(text="Регламент", callback_data="Регламент"),
+        ],
+        [
+            InlineKeyboardButton(text="Заявка", callback_data="Заявка"),
+            InlineKeyboardButton(text="Адреса", callback_data="Адреса"),
+            InlineKeyboardButton(text="Отчет", callback_data="Отчет"),
+        ],
+        [
+            InlineKeyboardButton(
+                text="Дневное Задание", callback_data="Дневное_задание"
+            ),
+            InlineKeyboardButton(
+                text="Оставить заявку", callback_data="Оставить заявку"
+            ),
+        ],
+        [
+            InlineKeyboardButton(text="День окончен", callback_data="День окончен"),
+        ],
     ]
 )
 
