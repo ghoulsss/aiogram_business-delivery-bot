@@ -10,7 +10,11 @@ from aiogram.fsm.context import FSMContext
 router1 = Router()
 
 
-class Text(StatesGroup):
+class Zadanie(StatesGroup):
+    text = State()
+
+
+class Reglament(StatesGroup):
     text = State()
 
 
@@ -122,21 +126,47 @@ async def reglament_callback(callback: CallbackQuery):
 
 @router1.callback_query(F.data == "Подтвердить_регламент")  # админ_склада
 async def reglament_callback(callback: CallbackQuery):
-    # отправка содержимого текстового в таблицу
-    # удаление текстового
-    await callback.message.edit_text(text="Отправлено регламент")
+    with open("add_reglament.txt", "r", encoding="utf-8") as file:
+        buf = []
+        for line in file:
+            row = line.strip().split()
+            buf.append(row)
+
+    worksheet = sh.worksheet("Сортировка")
+
+    worksheet.append_rows(buf)
+
+    with open("add_reglament.txt", "w") as file:
+        pass
+
+    await callback.message.edit_text(text=f"Регламент отправлено в таблицу")
     await callback.answer("")
 
 
 @router1.callback_query(F.data == "Добавить_регламент")  # админ_склада
-async def reglament_callback(callback: CallbackQuery):
-    await callback.message.edit_text(text="Добавить_регламент")
+async def reglament_callback(callback: CallbackQuery, state: FSMContext):
+    await state.set_state(Reglament.text)
+    await callback.message.edit_text(text="Введите")
     await callback.answer("")
+
+
+@router1.message(Reglament.text)
+async def reglament_process_callback(message: Message, state: FSMContext):
+    data = message.text
+    with open("add_reglament.txt", "a") as file:
+        file.writelines(f"{data}\n")
+
+    await message.answer(
+        f"Добавлено, нажмите 'Подтвердить' чтобы отправить в таблицу",
+        reply_markup=inline_keyboard_reglament,
+    )
 
 
 @router1.callback_query(F.data == "Заново_регламент")  # админ_склада
 async def reglament_callback(callback: CallbackQuery):
-    await callback.message.edit_text(text="Заново_регламент")
+    with open("add_reglament.txt", "w") as file:
+        pass
+    await callback.message.edit_text(text="Регламент очищено")
     await callback.answer("")
 
 
@@ -169,12 +199,12 @@ async def reglament_callback(callback: CallbackQuery):
 
 @router1.callback_query(F.data == "Добавить_задание")  # админ_склада
 async def reglament_callback(callback: CallbackQuery, state: FSMContext):
-    await state.set_state(Text.text)
+    await state.set_state(Zadanie.text)
     await callback.message.edit_text(text="Введите")
     await callback.answer("")
 
 
-@router1.message(Text.text)
+@router1.message(Zadanie.text)
 async def reglament_process_callback(message: Message, state: FSMContext):
     data = message.text
     with open("add_zadanie.txt", "a") as file:

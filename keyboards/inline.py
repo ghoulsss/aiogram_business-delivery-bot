@@ -8,7 +8,7 @@ inline_keyboard_menu_admin_sklada = InlineKeyboardMarkup(
             InlineKeyboardButton(text="Регламент", callback_data="Регламент"),
         ],
         [
-            InlineKeyboardButton(text="Регламент", callback_data="Регламент"),
+            InlineKeyboardButton(text="Задание", callback_data="Задание"),
             InlineKeyboardButton(text="Заявка", callback_data="Заявка"),
         ],
     ]
