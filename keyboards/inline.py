@@ -18,7 +18,7 @@ inline_keyboard_menu_courier = InlineKeyboardMarkup(
     inline_keyboard=[
         [
             InlineKeyboardButton(
-                text="Оставить заявку", callback_data="Оставить заявку"
+                text="Оставить заявку", callback_data="Оставить_заявку"
             ),
             InlineKeyboardButton(text="Адреса", callback_data="Адреса"),
         ],
