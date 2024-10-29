@@ -15,15 +15,15 @@ async def start(message: Message):
     if proverka_prav:
         if message.from_user.id == admin_sklada:
             await message.answer(
-                "Меню", reply_markup=inline_keyboard_menu_admin_sklada
+                "Меню Админа склада", reply_markup=inline_keyboard_menu_admin_sklada
             )  # inline_keyboard_menu_admin_sklada
         elif message.from_user.id == super_user:
             await message.answer(
-                "Меню", reply_markup=inline_keyboard_menu_admin
+                "Меню Админа", reply_markup=inline_keyboard_menu_admin
             )  # inline_keyboard_menu_admin
         elif message.from_user.id == courier:
             await message.answer(
-                "Меню", reply_markup=inline_keyboard_menu_courier
+                "Меню Курьера", reply_markup=inline_keyboard_menu_courier
             )  # inline_keyboard_menu_courier
 
 

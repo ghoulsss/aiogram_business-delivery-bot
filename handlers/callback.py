@@ -71,17 +71,18 @@ async def adress_callback(callback: CallbackQuery):
     if proverka_prav:
         if callback.from_user.id == admin_sklada:
             await callback.message.edit_text(
-                text="Меню", reply_markup=inline_keyboard_menu_admin_sklada
+                text="Меню Админа склада",
+                reply_markup=inline_keyboard_menu_admin_sklada,
             )  # inline_keyboard_menu_admin_sklada
             await callback.answer("")
         elif callback.from_user.id == super_user:
             await callback.message.edit_text(
-                text="Меню", reply_markup=inline_keyboard_menu_admin
+                text="Меню Главного админа", reply_markup=inline_keyboard_menu_admin
             )  # inline_keyboard_menu_admin
             await callback.answer("")
         elif callback.from_user.id == courier:
             await callback.message.edit_text(
-                text="Меню", reply_markup=inline_keyboard_menu_courier
+                text="Меню Курьера", reply_markup=inline_keyboard_menu_courier
             )  # inline_keyboard_menu_courier
             await callback.answer("")
 
@@ -98,14 +99,17 @@ async def reglament_callback(callback: CallbackQuery):
     )
 
     buffer = ""
-    for i in adress[1:]:
-        buffer += (
-            f"id адреса: {i[0]}\nid товара: {i[1]}\nАдрес: {i[2]}\nВладелец: {i[3]}\nКоличество: {i[4]}\n"
-            f"Наименование: {i[5]}\nТелефон: {i[6]}\n\n"
-        )
-
-    await callback.message.edit_text(text=f"{buffer}")
-    await callback.answer("")
+    try:
+        for i in adress[1:]:
+            buffer += (
+                f"id адреса: {i[0]}\nid товара: {i[1]}\nАдрес: {i[2]}\nВладелец: {i[3]}\nКоличество: {i[4]}\n"
+                f"Наименование: {i[5]}\nТелефон: {i[6]}\n\n"
+            )
+        await callback.message.edit_text(text=f"{buffer}")
+    except IndexError:
+        callback.message.edit_text(text="Ошибка в таблице")
+    finally:
+        await callback.answer("")
 
 
 @router1.callback_query(F.data == "Заявка")  # курьер
