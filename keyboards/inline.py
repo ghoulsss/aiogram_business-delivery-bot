@@ -53,6 +53,9 @@ inline_keyboard_menu_admin = InlineKeyboardMarkup(
         ],
         [
             InlineKeyboardButton(text="День окончен", callback_data="День_окончен"),
+            InlineKeyboardButton(
+                text="Обновить пользователей", callback_data="Обновить_пользователей"
+            ),
         ],
     ]
 )

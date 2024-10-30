@@ -345,3 +345,11 @@ async def reglament_callback(callback: CallbackQuery):
 
     await callback.message.edit_text(text="Заявка очищена!")
     await callback.answer("")
+
+
+@router1.callback_query(F.data == "Обновить_пользователей")  # админ
+async def reglament_callback(callback: CallbackQuery):
+    worksheet = sh.worksheet("Пользователи")
+    users = worksheet.get_all_records()
+    await callback.message.answer(text=f"Пользователи обновлены {users}")
+    await callback.answer("")

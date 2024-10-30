@@ -40,3 +40,8 @@ courier = int(users[2][1])
 gc = gspread.service_account(filename="key.json")
 
 sh = gc.open("доставка")
+
+# # -----------------------------------
+# worksheet = sh.worksheet("Пользователи")
+# users = worksheet.get_all_records()
+# print(f"Пользователи обновлены {users}")
