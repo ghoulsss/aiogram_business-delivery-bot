@@ -296,9 +296,38 @@ async def reglament_callback(callback: CallbackQuery):
 
     existing_data = worksheet_sort.get_all_values()[1:]
     if existing_data:
-        for row in existing_data:
-            worksheet_vse.append_row(row)
-        else:
+        existing_data_sort = worksheet_sort.get_all_values()[1:]  # Пропускаем заголовок
+        existing_data_vse = worksheet_vse.get_all_values()[1:]
+
+        all_products_dict = {
+            row[1]: int(row[2]) for row in existing_data_vse if len(row) >= 3
+        }
+
+        for row in existing_data_sort:
+            fruit_name = row[1]  # Название фрукта из столбца B
+            quantity_to_add = int(row[2])  # Количество из столбца C
+
+            if fruit_name in all_products_dict:
+                # Если фрукт найден, обновляем количество
+                all_products_dict[fruit_name] += quantity_to_add
+                print(
+                    f"Обновляем {fruit_name}: {all_products_dict[fruit_name]}"
+                )  # Для проверки
+            else:
+                print(f"{fruit_name} не найден в таблице всех товаров.")
+
+        # Обновление таблицы всех товаров с новыми количествами
+        for fruit, new_quantity in all_products_dict.items():
+            # Находим строку с фруктом и обновляем количество
+            for row_index, row in enumerate(
+                existing_data_vse, start=2
+            ):  # Начинаем с 2, чтобы пропустить заголовок
+                if row[1] == fruit:
+                    worksheet_vse.update_cell(
+                        row_index, 3, new_quantity
+                    )  # Обновляем количество в столбце C
+                    print(f"Обновлено: {fruit} - {new_quantity}")
+
             worksheet_sort.batch_clear(["A2:D"])
     else:
         await callback.message.answer(
