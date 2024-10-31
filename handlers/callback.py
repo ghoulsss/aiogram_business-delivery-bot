@@ -292,11 +292,14 @@ async def reglament_callback(callback: CallbackQuery):
 async def reglament_callback(callback: CallbackQuery):
     worksheet_sort = sh.worksheet("Сортировка")
     worksheet_zada = sh.worksheet("Задание")
+    worksheet_vse = sh.worksheet("Все товары")
 
-    existing_data = worksheet_sort.col_values(1)[1:]
+    existing_data = worksheet_sort.get_all_values()[1:]
     if existing_data:
-        for item in existing_data:
-            worksheet_zada.append_row(item)
+        for row in existing_data:
+            worksheet_vse.append_row(row)
+        else:
+            worksheet_sort.batch_clear(["A2:D"])
     else:
         await callback.message.answer(
             text="Таблица сортировки пуста, новые данные не добавлены"
