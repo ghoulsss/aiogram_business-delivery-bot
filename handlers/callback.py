@@ -304,32 +304,25 @@ async def reglament_callback(callback: CallbackQuery):
         }
 
         for row in existing_data_sort:
-            fruit_name = row[1].strip()  # Название фрукта из столбца B
-            quantity_to_add = int(row[2])  # Количество из столбца C
-            price = float(row[3])  # Цена из столбца D
+            fruit_name = row[1].strip()
+            quantity_to_add = int(row[2])
+            price = float(row[3])
 
-            # Если фрукт найден, обновляем количество
             if fruit_name in all_products_dict:
-                # Получаем текущие данные
                 current_data = all_products_dict[fruit_name]
-                new_quantity = (
-                    int(current_data[2]) + quantity_to_add
-                )  # Обновляем количество
+                new_quantity = int(current_data[2]) + quantity_to_add
                 worksheet_vse.update_cell(
                     existing_data_vse.index(current_data) + 2, 3, new_quantity
-                )  # Обновляем количество в столбце C
+                )
             else:
-                # Если фрукт не найден, добавляем его в конец таблицы
-                new_id = str(
-                    len(existing_data_vse) + 1
-                )  # Генерация ID (или используйте свою логику для получения ID)
+                new_id = str(len(existing_data_vse) + 1)
                 new_row = [
                     new_id,
                     fruit_name,
                     quantity_to_add,
                     price,
-                ]  # Добавляем цену в новый ряд
-                worksheet_vse.append_row(new_row)  # Добавляем новую строку с данными
+                ]
+                worksheet_vse.append_row(new_row)
 
         worksheet_sort.batch_clear(["A2:D"])
 
