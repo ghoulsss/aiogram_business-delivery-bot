@@ -28,13 +28,20 @@ def get_credentials():
 roles = {"Супер юзер": [], "Админ склада": [], "Курьер": []}
 
 
+async def remove_users():
+    global roles
+    for role in roles:
+        roles[role].clear()
+
+
 async def get_users():
+    global roles
     worksheet = sh.worksheet("Пользователи")
     users = worksheet.get_all_records()
     for row in users:
         role = row["Роль"]
         user_id = row["id"]
-        if role in roles:
+        if role in roles and user_id not in roles[role]:
             roles[role].append(user_id)
 
 

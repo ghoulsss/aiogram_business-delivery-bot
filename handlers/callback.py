@@ -292,10 +292,17 @@ async def reglament_callback(callback: CallbackQuery):
 async def reglament_callback(callback: CallbackQuery):
     worksheet_sort = sh.worksheet("Сортировка")
     worksheet_zada = sh.worksheet("Задание")
-    # if сортировка не пустая в клетках ["A2:D"]
-    # добавляем в таблицу "все товары" остатки
-    # else:
-    # worksheet_sort.batch_clear(["A2:D"])
+
+    existing_data = worksheet_sort.col_values(1)[1:]
+    if existing_data:
+        for item in existing_data:
+            worksheet_zada.append_row(item)
+    else:
+        await callback.message.answer(
+            text="Таблица сортировки пуста, новые данные не добавлены"
+        )
+        worksheet_sort.batch_clear(["A2:D"])
+
     worksheet_zada.batch_clear(["A2:G"])
     await callback.message.edit_text(text="Сортировка и Задание очищены")
     await callback.answer("")
@@ -350,6 +357,7 @@ async def reglament_callback(callback: CallbackQuery):
 
 @router1.callback_query(F.data == "Обновить_пользователей")  # админ
 async def reglament_callback(callback: CallbackQuery):
+    await remove_users()
     await get_users()
     await callback.message.answer(text=f"Пользователи обновлены")
     await callback.answer("")
