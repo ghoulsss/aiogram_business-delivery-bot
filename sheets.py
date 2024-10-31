@@ -17,14 +17,6 @@ if not credentials.valid:
 
 service = build("sheets", "v4", credentials=credentials)
 
-users = (
-    service.spreadsheets()
-    .values()
-    .get(spreadsheetId=spreadsheet_id, range="Пользователи")
-    .execute()
-    .get("values", [])
-)
-
 
 def get_credentials():
     if not credentials.valid:
@@ -33,15 +25,19 @@ def get_credentials():
     return credentials
 
 
-super_user = int(users[0][1])
-admin_sklada = int(users[1][1])
-courier = int(users[2][1])
+roles = {"Супер юзер": [], "Админ склада": [], "Курьер": []}
+
+
+async def get_users():
+    worksheet = sh.worksheet("Пользователи")
+    users = worksheet.get_all_records()
+    for row in users:
+        role = row["Роль"]
+        user_id = row["id"]
+        if role in roles:
+            roles[role].append(user_id)
+
 
 gc = gspread.service_account(filename="key.json")
 
 sh = gc.open("доставка")
-
-# # -----------------------------------
-# worksheet = sh.worksheet("Пользователи")
-# users = worksheet.get_all_records()
-# print(f"Пользователи обновлены {users}")

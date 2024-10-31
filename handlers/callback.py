@@ -2,7 +2,6 @@ from aiogram import Router, F
 from aiogram.types import CallbackQuery, Message
 from sheets import *
 from keyboards.inline import *
-from handlers.handlers import proverka_prav
 from aiogram.fsm.state import StatesGroup, State
 from aiogram.fsm.context import FSMContext
 
@@ -68,23 +67,22 @@ async def zayavka_callback(callback: CallbackQuery):
 
 @router1.callback_query(F.data == "Меню")  #  общая
 async def adress_callback(callback: CallbackQuery):
-    if proverka_prav:
-        if callback.from_user.id == admin_sklada:
-            await callback.message.edit_text(
-                text="Меню Админа склада",
-                reply_markup=inline_keyboard_menu_admin_sklada,
-            )  # inline_keyboard_menu_admin_sklada
-            await callback.answer("")
-        elif callback.from_user.id == super_user:
-            await callback.message.edit_text(
-                text="Меню Главного админа", reply_markup=inline_keyboard_menu_admin
-            )  # inline_keyboard_menu_admin
-            await callback.answer("")
-        elif callback.from_user.id == courier:
-            await callback.message.edit_text(
-                text="Меню Курьера", reply_markup=inline_keyboard_menu_courier
-            )  # inline_keyboard_menu_courier
-            await callback.answer("")
+    if callback.from_user.id in roles["Админ склада"]:
+        await callback.message.edit_text(
+            text="Меню Админа склада",
+            reply_markup=inline_keyboard_menu_admin_sklada,
+        )
+        await callback.answer("")
+    elif callback.from_user.id in roles["Супер юзер"]:
+        await callback.message.edit_text(
+            text="Меню Главного админа", reply_markup=inline_keyboard_menu_admin
+        )
+        await callback.answer("")
+    elif callback.from_user.id in roles["Курьер"]:
+        await callback.message.edit_text(
+            text="Меню Курьера", reply_markup=inline_keyboard_menu_courier
+        )
+        await callback.answer("")
 
 
 @router1.callback_query(F.data == "Дневное_задание")  # курьер вывод
@@ -349,7 +347,6 @@ async def reglament_callback(callback: CallbackQuery):
 
 @router1.callback_query(F.data == "Обновить_пользователей")  # админ
 async def reglament_callback(callback: CallbackQuery):
-    worksheet = sh.worksheet("Пользователи")
-    users = worksheet.get_all_records()
-    await callback.message.answer(text=f"Пользователи обновлены {users}")
+    await get_users()
+    await callback.message.answer(text=f"Пользователи обновлены")
     await callback.answer("")

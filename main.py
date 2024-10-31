@@ -4,6 +4,7 @@ from aiogram import Bot, Dispatcher
 from dotenv import load_dotenv
 from handlers.handlers import router
 from handlers.callback import router1
+from handlers.callback import get_users
 
 
 async def main():
@@ -15,7 +16,7 @@ async def main():
 
     dp.include_router(router)
     dp.include_router(router1)
-
+    await get_users()
     await dp.start_polling(bot)
 
 
