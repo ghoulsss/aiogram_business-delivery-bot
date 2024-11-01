@@ -27,7 +27,6 @@ class Zayavka(StatesGroup):
 
 @router1.callback_query(F.data == "Адреса")  # общая
 async def adress_callback(callback: CallbackQuery):
-    get_credentials()
     adress = (
         service.spreadsheets()
         .values()
@@ -45,7 +44,6 @@ async def adress_callback(callback: CallbackQuery):
 
 @router1.callback_query(F.data == "Заявка")  # админ_склада вывод
 async def zayavka_callback(callback: CallbackQuery):
-    get_credentials()
     adress = (
         service.spreadsheets()
         .values()
@@ -87,7 +85,6 @@ async def adress_callback(callback: CallbackQuery):
 
 @router1.callback_query(F.data == "Дневное_задание")  # курьер вывод
 async def reglament_callback(callback: CallbackQuery):
-    get_credentials()
     adress = (
         service.spreadsheets()
         .values()

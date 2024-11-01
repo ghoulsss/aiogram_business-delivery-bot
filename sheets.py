@@ -17,14 +17,6 @@ if not credentials.valid:
 
 service = build("sheets", "v4", credentials=credentials)
 
-
-def get_credentials():
-    if not credentials.valid:
-        credentials.refresh()
-
-    return credentials
-
-
 roles = {"Супер юзер": [], "Админ склада": [], "Курьер": []}
 
 
