@@ -241,6 +241,12 @@ async def reglament_callback(callback: CallbackQuery):
 
 @router1.callback_query(F.data == "Подтвердить_отчет")  # курьер
 async def reglament_callback(callback: CallbackQuery):
+    # for // in txt:
+    # try:
+    # вычесть из сортировки если есть
+    # except:
+    # pass
+    # -----------------------------------------------------------------------------
     with open("add_otchet.txt", "r", encoding="utf-8") as file:
         buf = []
         for line in file:
