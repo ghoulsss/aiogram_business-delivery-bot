@@ -145,7 +145,9 @@ async def reglament_callback(callback: CallbackQuery):
 @router1.callback_query(F.data == "Добавить_регламент")  # админ_склада
 async def reglament_callback(callback: CallbackQuery, state: FSMContext):
     await state.set_state(Reglament.text)
-    await callback.message.edit_text(text="Введите товар и кол-во...поменять что нужно")
+    await callback.message.edit_text(
+        text="Введите id товара, наименование, кол-во и цену"
+    )
     await callback.answer("")
 
 
@@ -199,7 +201,9 @@ async def reglament_callback(callback: CallbackQuery):
 @router1.callback_query(F.data == "Добавить_задание")  # админ_склада
 async def reglament_callback(callback: CallbackQuery, state: FSMContext):
     await state.set_state(Zadanie.text)
-    await callback.message.edit_text(text="Введите товар и кол-во...поменять что нужно")
+    await callback.message.edit_text(
+        text="Введите id адреса, id товара, адрес, владельца, кол-во, наименование и телефон"
+    )
     await callback.answer("")
 
 
@@ -299,7 +303,9 @@ async def reglament_callback(callback: CallbackQuery):
 @router1.callback_query(F.data == "Добавить_отчет")  # админ_склада
 async def reglament_callback(callback: CallbackQuery, state: FSMContext):
     await state.set_state(Otchet.text)
-    await callback.message.edit_text(text="Введите товар и кол-во...поменять что нужно")
+    await callback.message.edit_text(
+        text="Введите id адреса, id товара, адрес, владельца, наименование, кол-во, телефон и цену"
+    )
     await callback.answer("")
 
 
@@ -388,7 +394,9 @@ async def reglament_callback(callback: CallbackQuery):
 @router1.callback_query(F.data == "Добавить_заявка")  # админ_склада
 async def reglament_callback(callback: CallbackQuery, state: FSMContext):
     await state.set_state(Zayavka.text)
-    await callback.message.edit_text(text="Введите товар и кол-во...поменять что нужно")
+    await callback.message.edit_text(
+        text="Введите id адреса, id товара, адрес, владельца, кол-во, наименование, телефон	и цену"
+    )
     await callback.answer("")
 
 
