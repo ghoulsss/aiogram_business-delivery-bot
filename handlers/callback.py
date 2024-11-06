@@ -36,7 +36,7 @@ async def adress_callback(callback: CallbackQuery):
     )
     buffer = ""
     for i in adress[1:]:
-        buffer += f"id адреса: {i[0]}\nАдрес: {i[1]}\nВладелец: {i[2]}\nТелефон: {i[3]}\nПочта: {i[4]}\n\n"
+        buffer += f"Адрес: {find_address(i[1])}\nВладелец: {i[2]}\nТелефон: {i[3]}\nПочта: {i[4]}\n\n"
 
     await callback.message.answer(text=f"{buffer}")
     await callback.answer("")
@@ -55,8 +55,8 @@ async def zayavka_callback(callback: CallbackQuery):
     buffer = ""
     for i in adress[1:]:
         buffer += (
-            f"id адреса: {i[0]}\nid товара: {i[1]}\nАдрес: {i[2]}\nВладелец: {i[3]}\nКоличество: {i[4]}\n"
-            f"Наименование: {i[5]}\nТелефон: {i[6]}\nЦена: {i[7]}\n\n"
+            f"Адрес: {find_address(i[2])}\nВладелец: {i[3]}\nКоличество: {i[4]}\n"
+            f"Наименование: {i[5]}\n\n"
         )
 
     await callback.message.answer(text=f"{buffer}")
@@ -97,7 +97,7 @@ async def reglament_callback(callback: CallbackQuery):
     try:
         for i in adress[1:]:
             buffer += (
-                f"id адреса: {i[0]}\nid товара: {i[1]}\nАдрес: {i[2]}\nВладелец: {i[3]}\nКоличество: {i[4]}\n"
+                f"Адрес: {find_address(i[2])}\nВладелец: {i[3]}\nКоличество: {i[4]}\n"
                 f"Наименование: {i[5]}\nТелефон: {i[6]}\n\n"
             )
         await callback.message.edit_text(text=f"{buffer}")
@@ -152,6 +152,7 @@ async def reglament_callback(callback: CallbackQuery, state: FSMContext):
 @router1.message(Reglament.text)
 async def reglament_process_callback(message: Message, state: FSMContext):
     data = message.text
+    await state.finish()
     with open("add_reglament.txt", "a") as file:
         file.writelines(f"{data}\n")
 
@@ -206,6 +207,7 @@ async def reglament_callback(callback: CallbackQuery, state: FSMContext):
 @router1.message(Zadanie.text)
 async def reglament_process_callback(message: Message, state: FSMContext):
     data = message.text
+    await state.finish()
     with open("add_zadanie.txt", "a") as file:
         file.writelines(f"{data}\n")
 
@@ -268,6 +270,7 @@ async def reglament_callback(callback: CallbackQuery, state: FSMContext):
 @router1.message(Otchet.text)
 async def reglament_process_callback(message: Message, state: FSMContext):
     data = message.text
+    await state.finish()
     with open("add_otchet.txt", "a") as file:
         file.writelines(f"{data}\n")
 
@@ -357,6 +360,7 @@ async def reglament_callback(callback: CallbackQuery, state: FSMContext):
 @router1.message(Zayavka.text)
 async def reglament_process_callback(message: Message, state: FSMContext):
     data = message.text
+    await state.finish()
     with open("add_zayavka.txt", "a") as file:
         file.writelines(f"{data}\n")
 
@@ -381,3 +385,12 @@ async def reglament_callback(callback: CallbackQuery):
     await get_users()
     await callback.message.answer(text=f"Пользователи обновлены")
     await callback.answer("")
+
+
+def find_address(address):
+    if address:
+        url = f"https://yandex.ru/maps/?text={'+'.join(address.split())}"
+        message_text = f"{url}"
+        return message_text
+    else:
+        return "Адрес не найден"
