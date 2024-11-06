@@ -28,7 +28,7 @@ inline_keyboard_menu_courier = InlineKeyboardMarkup(
             ),
             InlineKeyboardButton(text="Отчет", callback_data="Отчет"),
         ],
-        [InlineKeyboardButton(text="День окончен", callback_data="День окончен")],
+        [InlineKeyboardButton(text="День окончен", callback_data="День_окончен")],
     ]
 )
 

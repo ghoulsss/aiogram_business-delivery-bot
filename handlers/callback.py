@@ -145,7 +145,9 @@ async def reglament_callback(callback: CallbackQuery):
 @router1.callback_query(F.data == "Добавить_регламент")  # админ_склада
 async def reglament_callback(callback: CallbackQuery, state: FSMContext):
     await state.set_state(Reglament.text)
-    await callback.message.edit_text(text="Введите товар и кол-во...поменять что нужно")
+    await callback.message.edit_text(
+        text="Введите id товара, наименование, кол-во и цену"
+    )
     await callback.answer("")
 
 
@@ -200,7 +202,9 @@ async def reglament_callback(callback: CallbackQuery):
 @router1.callback_query(F.data == "Добавить_задание")  # админ_склада
 async def reglament_callback(callback: CallbackQuery, state: FSMContext):
     await state.set_state(Zadanie.text)
-    await callback.message.edit_text(text="Введите товар и кол-во...поменять что нужно")
+    await callback.message.edit_text(
+        text="Введите id адреса, id товара, адрес, владельца, кол-во, наименование и телефон"
+    )
     await callback.answer("")
 
 
@@ -256,6 +260,44 @@ async def reglament_callback(callback: CallbackQuery):
     with open("add_otchet.txt", "w") as file:
         pass
 
+    # ------------------------------------------------------------------------------
+    sheet_sort = sh.worksheet("Сортировка")
+    sheet_otchet = sh.worksheet("Отчет")
+
+    sorti = sheet_sort.get_all_records()
+    otchet = sheet_otchet.get_all_records()
+
+    inventory1 = {
+        row["Наименование"]: {
+            "id товара": row["id товара"],
+            "Количество": row["Количество"],
+            "Цена": row["Цена"],
+        }
+        for row in sorti
+    }
+    inventory2 = {row["Наименование"]: row["Количество"] for row in otchet}
+
+    result_inventory = {}
+    for name, data in inventory1.items():
+        id_ = data["id товара"]
+        qty1 = data["Количество"]
+        price = data["Цена"]
+        qty2 = inventory2.get(name, 0)
+
+        result_inventory[name] = {
+            "id товара": id_,
+            "Количество": qty1 - qty2,
+            "Цена": price,
+        }
+
+    new_data = [
+        [data["id товара"], name, data["Количество"], data["Цена"]]
+        for name, data in result_inventory.items()
+    ]
+
+    sheet_sort.batch_clear(["A2:Z"])
+    sheet_sort.append_rows(new_data, value_input_option="RAW")
+    # -----------------------------------------------------------------------------
     await callback.message.edit_text(text=f"Отчет отправлен в таблицу")
     await callback.answer("")
 
@@ -263,7 +305,9 @@ async def reglament_callback(callback: CallbackQuery):
 @router1.callback_query(F.data == "Добавить_отчет")  # админ_склада
 async def reglament_callback(callback: CallbackQuery, state: FSMContext):
     await state.set_state(Otchet.text)
-    await callback.message.edit_text(text="Введите товар и кол-во...поменять что нужно")
+    await callback.message.edit_text(
+        text="Введите id адреса, id товара, адрес, владельца, наименование, кол-во, телефон и цену"
+    )
     await callback.answer("")
 
 
@@ -353,7 +397,9 @@ async def reglament_callback(callback: CallbackQuery):
 @router1.callback_query(F.data == "Добавить_заявка")  # админ_склада
 async def reglament_callback(callback: CallbackQuery, state: FSMContext):
     await state.set_state(Zayavka.text)
-    await callback.message.edit_text(text="Введите товар и кол-во...поменять что нужно")
+    await callback.message.edit_text(
+        text="Введите id адреса, id товара, адрес, владельца, кол-во, наименование, телефон	и цену"
+    )
     await callback.answer("")
 
 
