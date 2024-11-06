@@ -203,7 +203,7 @@ async def reglament_callback(callback: CallbackQuery):
 async def reglament_callback(callback: CallbackQuery, state: FSMContext):
     await state.set_state(Zadanie.text)
     await callback.message.edit_text(
-        text="Введите id адреса, id товара, адрес, владельца, кол-во, наименование и телефон"
+        text="Введите Адрес Владельца Количество Наименование Телефон"
     )
     await callback.answer("")
 
@@ -306,7 +306,7 @@ async def reglament_callback(callback: CallbackQuery):
 async def reglament_callback(callback: CallbackQuery, state: FSMContext):
     await state.set_state(Otchet.text)
     await callback.message.edit_text(
-        text="Введите id адреса, id товара, адрес, владельца, наименование, кол-во, телефон и цену"
+        text="Отчет : Введите Адрес Владельца Наименование Количество"
     )
     await callback.answer("")
 
@@ -398,7 +398,7 @@ async def reglament_callback(callback: CallbackQuery):
 async def reglament_callback(callback: CallbackQuery, state: FSMContext):
     await state.set_state(Zayavka.text)
     await callback.message.edit_text(
-        text="Введите id адреса, id товара, адрес, владельца, кол-во, наименование, телефон	и цену"
+        text="Введите Адрес Владельца Наименование Количество"
     )
     await callback.answer("")
 
