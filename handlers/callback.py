@@ -55,8 +55,8 @@ async def zayavka_callback(callback: CallbackQuery):
     buffer = ""
     for i in adress[1:]:
         buffer += (
-            f"Адрес: {find_address(i[2])}\nВладелец: {i[3]}\nКоличество: {i[4]}\n"
-            f"Наименование: {i[5]}\n\n"
+            f"Адрес: {find_address(i[0])}\nВладелец: {i[1]}\nКоличество: {i[2]}\n"
+            f"Наименование: {i[3]}\n\n"
         )
 
     await callback.message.answer(text=f"{buffer}")
@@ -97,8 +97,8 @@ async def reglament_callback(callback: CallbackQuery):
     try:
         for i in adress[1:]:
             buffer += (
-                f"Адрес: {find_address(i[2])}\nВладелец: {i[3]}\nКоличество: {i[4]}\n"
-                f"Наименование: {i[5]}\nТелефон: {i[6]}\n\n"
+                f"Адрес: {find_address(i[0])}\nВладелец: {i[1]}\nКоличество: {i[2]}\n"
+                f"Наименование: {i[3]}\nТелефон: {i[4]}\n\n"
             )
         await callback.message.edit_text(text=f"{buffer}")
     except IndexError:
