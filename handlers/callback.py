@@ -38,7 +38,7 @@ async def adress_callback(callback: CallbackQuery):
     for i in adress[1:]:
         buffer += f"Адрес: {find_address(i[1])}\nВладелец: {i[2]}\nТелефон: {i[3]}\nПочта: {i[4]}\n\n"
 
-    await callback.message.answer(text=f"{buffer}")
+    await callback.message.answer(text=f"{buffer}", disable_web_page_preview=True)
     await callback.answer("")
 
 
@@ -138,7 +138,41 @@ async def reglament_callback(callback: CallbackQuery):
     with open("add_reglament.txt", "w") as file:
         pass
 
-    await callback.message.edit_text(text=f"Регламент отправлен в таблицу")
+    worksheet_sort = sh.worksheet("Сортировка")
+    worksheet_vse = sh.worksheet("Все товары")
+
+    existing_data = worksheet_sort.get_all_values()[1:]
+    if existing_data:
+        existing_data_sort = worksheet_sort.get_all_values()[1:]
+        existing_data_vse = worksheet_vse.get_all_values()[1:]
+
+        all_products_dict = {
+            row[1].strip(): row for row in existing_data_vse if len(row) >= 4
+        }
+
+        for row in existing_data_sort:
+            fruit_name = row[1].strip()
+            quantity_to_add = int(row[2])
+            price = float(row[3])
+
+            if fruit_name in all_products_dict:
+                current_data = all_products_dict[fruit_name]
+                new_quantity = int(current_data[2]) - quantity_to_add
+                worksheet_vse.update_cell(
+                    existing_data_vse.index(current_data) + 2, 3, new_quantity
+                )
+            else:
+                new_id = str(len(existing_data_vse) + 1)
+                new_row = [
+                    new_id,
+                    fruit_name,
+                    quantity_to_add,
+                    price,
+                ]
+                worksheet_vse.append_row(new_row)
+
+
+    await callback.message.edit_text(text=f"Регламент отправлен в таблицу и вычтен из всех товаров")
     await callback.answer("")
 
 
@@ -154,7 +188,7 @@ async def reglament_callback(callback: CallbackQuery, state: FSMContext):
 @router1.message(Reglament.text)
 async def reglament_process_callback(message: Message, state: FSMContext):
     data = message.text
-    await state.finish()
+    await state.clear()
     with open("add_reglament.txt", "a") as file:
         file.writelines(f"{data}\n")
 
@@ -211,7 +245,7 @@ async def reglament_callback(callback: CallbackQuery, state: FSMContext):
 @router1.message(Zadanie.text)
 async def reglament_process_callback(message: Message, state: FSMContext):
     data = message.text
-    await state.finish()
+    await state.clear()
     with open("add_zadanie.txt", "a") as file:
         file.writelines(f"{data}\n")
 
@@ -306,7 +340,7 @@ async def reglament_callback(callback: CallbackQuery):
 async def reglament_callback(callback: CallbackQuery, state: FSMContext):
     await state.set_state(Otchet.text)
     await callback.message.edit_text(
-        text="Отчет : Введите Адрес Владельца Наименование Количество"
+        text="Введите Адрес Владельца Наименование Количество"
     )
     await callback.answer("")
 
@@ -314,7 +348,7 @@ async def reglament_callback(callback: CallbackQuery, state: FSMContext):
 @router1.message(Otchet.text)
 async def reglament_process_callback(message: Message, state: FSMContext):
     data = message.text
-    await state.finish()
+    await state.clear()
     with open("add_otchet.txt", "a") as file:
         file.writelines(f"{data}\n")
 
@@ -406,7 +440,7 @@ async def reglament_callback(callback: CallbackQuery, state: FSMContext):
 @router1.message(Zayavka.text)
 async def reglament_process_callback(message: Message, state: FSMContext):
     data = message.text
-    await state.finish()
+    await state.clear() 
     with open("add_zayavka.txt", "a") as file:
         file.writelines(f"{data}\n")
 
