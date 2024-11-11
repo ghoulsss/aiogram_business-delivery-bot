@@ -36,7 +36,7 @@ async def adress_callback(callback: CallbackQuery):
     )
     buffer = ""
     for i in adress[1:]:
-        buffer += f"Адрес: {find_address(i[1])}\nВладелец: {i[2]}\nТелефон: {i[3]}\nПочта: {i[4]}\n\n"
+        buffer += f"Адрес: {find_address(i[1])}\nВладелец: {i[2]}\nТелефон: {create_whatsapp_link(i[3])}\nПочта: {i[4]}\n\n"
 
     await callback.message.answer(text=f"{buffer}", disable_web_page_preview=True)
     await callback.answer("")
@@ -474,3 +474,7 @@ def find_address(address):
         return message_text
     else:
         return "Адрес не найден"
+
+def create_whatsapp_link(phone_number):
+       normalized_number = ''.join(filter(str.isdigit, phone_number))
+       return f"https://wa.me/{normalized_number}"
