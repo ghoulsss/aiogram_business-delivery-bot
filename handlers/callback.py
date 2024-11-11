@@ -59,7 +59,7 @@ async def zayavka_callback(callback: CallbackQuery):
             f"Наименование: {i[3]}\n\n"
         )
 
-    await callback.message.answer(text=f"{buffer}", , disable_web_page_preview=True)
+    await callback.message.answer(text=f"{buffer}", disable_web_page_preview=True)
     await callback.answer("")
 
 
@@ -102,7 +102,7 @@ async def reglament_callback(callback: CallbackQuery):
             )
         await callback.message.edit_text(text=f"{buffer}")
     except IndexError:
-        callback.message.edit_text(text="Ошибка в таблице", , disable_web_page_preview=True)
+        callback.message.edit_text(text="Ошибка в таблице", disable_web_page_preview=True)
     finally:
         await callback.answer("")
 
